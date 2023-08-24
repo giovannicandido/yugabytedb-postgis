@@ -30,6 +30,8 @@ ARG RELEASE=Unknown
 ARG USER=root
 # `--build-arg JAVA_VERSION=11` to use java 11
 ARG JAVA_VERSION=1.8.0
+ARG TARGETPLATFORM
+ENV TARGETPLATFORM=${TARGETPLATFORM}
 
 LABEL name="YugabyteDB" \
     maintainer="YugaByte" \
