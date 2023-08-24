@@ -28,15 +28,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          function docker_tag_exists() {
-            curl --silent -f -lSL -H "Authorization: Bearer $GITHUB_TOKEN" https://ghcr.io/v2/$1/manifests/$2 > /dev/null
-          }
-          
+                    
           echo "Checking if image https://ghcr.io/v2/${{ github.repository_owner }}/$REPOSITORY/manifests/${{ matrix.version }}-${{ matrix.build }} exists"
           
-          if docker_tag_exists ${{ github.repository_owner }}/$REPOSITORY ${{ matrix.version }}-${{ matrix.build }}; then
+          if curl --head --silent -f -lSL -H "Authorization: Bearer $GITHUB_TOKEN" https://ghcr.io/v2/${{ github.repository_owner }}/$REPOSITORY/manifests/${{ matrix.version }}-${{ matrix.build }} > /dev/null; then
+            echo "image exist"
             echo "image_exist=true" >> $GITHUB_OUTPUT
           else
+            echo "image not exist
             echo "image_exist=false" >> $GITHUB_OUTPUT
           fi
       - name: Checkout Code
