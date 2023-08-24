@@ -17,7 +17,6 @@ jobs:
       packages: write
     strategy:
       matrix:
-        version: [2.18.2.1, 2.19.0.0]
         include:
           - version: 2.18.2.1
             build: b1
@@ -28,25 +27,20 @@ jobs:
             arm-suffix: el8-aarch64
             x86-suffix: linux-x86_64
     steps:
-      - name: Checkout Code ${{ matrix.version }}
+      - name: Checkout Code to build ${{ matrix.version }}
         uses: actions/checkout@v3
-        if: steps.check_image.outputs.image_exist == 'false'
-      - name: Set up QEMU ${{ matrix.version }}
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
-        if: steps.check_image.outputs.image_exist == 'false'
-      - name: Set up Docker Buildx ${{ matrix.version }}
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-        if: steps.check_image.outputs.image_exist == 'false'
-      - name: Log in to the GitHub Container registry ${{ matrix.version }}
-        if: steps.check_image.outputs.image_exist == 'false'
+      - name: Log in to the GitHub Container registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push ${{ matrix.version }}
-        if: steps.check_image.outputs.image_exist == 'false'
+      - name: Build and push version ${{ matrix.version }}
         run: |
           chmod +x build_docker.sh
           ./build_docker.sh -r ${{ env.IMAGE_REPO }} -a https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.arm-suffix }}.tar.gz -x https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.x86-suffix }}.tar.gz
