@@ -31,7 +31,7 @@ jobs:
                     
           echo "Checking if image https://ghcr.io/v2/${{ github.repository_owner }}/$REPOSITORY/manifests/${{ matrix.version }}-${{ matrix.build }} exists"
           
-          if curl --head --silent -f -lSL -H "Authorization: Bearer $GITHUB_TOKEN" https://ghcr.io/v2/${{ github.repository_owner }}/$REPOSITORY/manifests/${{ matrix.version }}-${{ matrix.build }} > /dev/null; then
+          if `curl --head --silent -f -lSL -H "Authorization: Bearer $GITHUB_TOKEN" https://ghcr.io/v2/${{ github.repository_owner }}/$REPOSITORY/manifests/${{ matrix.version }}-${{ matrix.build }} > /dev/null`; then
             echo "image exist"
             echo "image_exist=true" >> $GITHUB_OUTPUT
           else
