@@ -17,6 +17,7 @@ jobs:
       packages: write
     strategy:
       matrix:
+        version: [2.18.2.1, 2.19.0.0]
         include:
           - version: 2.18.2.1
             build: b1
