@@ -52,7 +52,7 @@ jobs:
             echo "::set-output name=image_exist::false"
           fi
       - name: Build and push
-        if: check_image.image_exist == 'false'
+        if: check_image.outputs.image_exist == 'false'
         run: |
           chmod +x build_docker.sh
           ./build_docker.sh -r ${{ env.IMAGE_REPO }} -a https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.arm-suffix }}.tar.gz -x https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.x86-suffix }}.tar.gz
