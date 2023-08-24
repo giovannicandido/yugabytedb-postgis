@@ -227,7 +227,7 @@ RUN chmod +x platform.sh && ./platform.sh
 RUN chmod +x install-postgis.sh  && ./install-postgis.sh
 
 RUN rm install-postgis.sh \
-    rm platform.sh
+    platform.sh
 
 # Expose the required ports.
 EXPOSE 7000 7100 7200 9000 9100 12000 11000 6379 9042 5433 10100
