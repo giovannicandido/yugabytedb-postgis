@@ -44,13 +44,12 @@ jobs:
             curl --silent -f -lSL -H "Authorization: Bearer $GITHUB_TOKEN" https://ghcr.io/v2/$1/manifests/$2 > /dev/null
           }
   
-          echo "Checking if image https://ghcr.io/v2/$1/manifests/$2 exists"
+          echo "Checking if image https://ghcr.io/v2/${{ env.IMAGE_RELEASE }}/manifests/${{ matrix.version }}-${{ matrix.build }} exists"
           
-          if docker_tag_exists $1 $2; then
+          if docker_tag_exists ${{ env.IMAGE_RELEASE }} ${{ matrix.version }}-${{ matrix.build }}; then
             echo "Image exists"
             exit 0
           else
             echo "Image not exists proceeding with build"
           fi
-          ./check_docker_tag.sh ${{ env.IMAGE_RELEASE }} ${{ matrix.version }}-${{ matrix.build }}
           ./build_docker.sh -r ${{ env.IMAGE_REPO }} -a https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.arm-suffix }}.tar.gz -x https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.x86-suffix }}.tar.gz
