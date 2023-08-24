@@ -59,7 +59,7 @@ tarball=$(basename $urix86)
 
 #yugabyte-2.18.1.0-b68-almalinux8-aarch64.tar.gz
 regex="(.*[^-])-([0-9]+([.][0-9]+){3}-[^-]+)-(.*[^-])-(.*[^.]).tar"
-target=yugabyte-postgis
+target=yugabytedb-postgis
 if [[ $tarball =~ $regex ]]; then
   full_version="${BASH_REMATCH[2]}"
   os="${BASH_REMATCH[4]}"
