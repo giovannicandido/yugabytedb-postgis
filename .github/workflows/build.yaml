@@ -25,19 +25,14 @@ jobs:
     steps:
       - name: Check if image exists
         id: check_image
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-                    
-          echo "Checking if image https://ghcr.io/v2/${{ github.repository_owner }}/$REPOSITORY/manifests/${{ matrix.version }}-${{ matrix.build }} exists"
-          
-          if [ `curl --head --silent -f -lSL -H "Authorization: Bearer $GITHUB_TOKEN" https://ghcr.io/v2/${{ github.repository_owner }}/$REPOSITORY/manifests/${{ matrix.version }}-${{ matrix.build }} > /dev/null` ]; then
-            echo "image exist"
-            echo "image_exist=true" >> $GITHUB_OUTPUT
-          else
-            echo "image not exist
-            echo "image_exist=false" >> $GITHUB_OUTPUT
-          fi
+        uses: cloudposse/github-action-docker-image-exists@main
+        with:
+          registry: ghcr.io
+          organization: "${{ github.repository_owner }}"
+          repository: "${{ github.event.repository.name }}"
+          login: "${{ github.actor }}"
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          tag: ${{ matrix.version }}-${{ matrix.build }}
       - name: Checkout Code
         uses: actions/checkout@v3
         if: steps.check_image.outputs.image_exist == 'false'
