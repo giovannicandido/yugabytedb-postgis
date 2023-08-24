@@ -10,6 +10,10 @@ ARG BASE_IMAGE=docker.io/library/almalinux:8
 
 FROM $BASE_IMAGE as intermediate
 
+ARG TARGETPLATFORM
+
+ENV TARGETPLATFORM=${TARGETPLATFORM}
+
 ENV YB_HOME=/home/yugabyte
 WORKDIR $YB_HOME
 
@@ -211,6 +215,17 @@ RUN set -x; \
     && curl -L -o /tmp/tini.sha256sum \
       https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-${arch}.sha256sum \
     && egrep $(sha256sum /sbin/tini) /tmp/tini.sha256sum
+
+COPY install-postgis.sh .
+
+COPY platform.sh .
+
+RUN chmod +x platform.sh && ./platform.sh
+
+RUN chmod +x install-postgis.sh  && ./install-postgis.sh && rm /.platform
+
+RUN rm install-postgis.sh \
+    rm platform.sh
 
 # Expose the required ports.
 EXPOSE 7000 7100 7200 9000 9100 12000 11000 6379 9042 5433 10100
