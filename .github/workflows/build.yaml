@@ -36,4 +36,5 @@ jobs:
 
       - name: Build and push
         run: |
-          sh build_docker.sh -a https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.arm-suffix }}.tar.gz -x https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.x86-suffix }}.tar.gz
+          chmod +x build_docker.sh
+          ./build_docker.sh -a https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.arm-suffix }}.tar.gz -x https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.x86-suffix }}.tar.gz
