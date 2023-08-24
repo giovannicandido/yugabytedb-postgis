@@ -216,13 +216,13 @@ RUN set -x; \
       https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-${arch}.sha256sum \
     && egrep $(sha256sum /sbin/tini) /tmp/tini.sha256sum
 
-COPY install-postgis.sh .
+COPY ./install-postgis.sh .
 
-COPY platform.sh .
+COPY ./platform.sh .
 
 RUN chmod +x platform.sh && ./platform.sh
 
-RUN chmod +x install-postgis.sh  && ./install-postgis.sh && rm /.platform
+RUN chmod +x install-postgis.sh  && ./install-postgis.sh
 
 RUN rm install-postgis.sh \
     rm platform.sh
