@@ -16,7 +16,7 @@ usage() {
 uri=''
 uriarm=''
 urix86=''
-repo_name='ghrc.io/giovannicandido'
+repo_name='ghcr.io/giovannicandido'
 tag_latest=false
 tag_arch=false
 while getopts ":h:x:a:r:l" arg; do
