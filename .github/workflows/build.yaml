@@ -34,22 +34,25 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push
+      - name: Check if image exists
+        id: check_image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          chmod +x build_docker.sh
+          
           function docker_tag_exists() {
             curl --silent -f -lSL -H "Authorization: Bearer $GITHUB_TOKEN" https://ghcr.io/v2/$1/manifests/$2 > /dev/null
           }
-  
+
           echo "Checking if image https://ghcr.io/v2/${{ env.IMAGE_RELEASE }}/manifests/${{ matrix.version }}-${{ matrix.build }} exists"
-          
+
           if docker_tag_exists ${{ env.IMAGE_RELEASE }} ${{ matrix.version }}-${{ matrix.build }}; then
-            echo "Image exists"
-            exit 0
+            echo "::set-output name=image_exist::true"
           else
-            echo "Image not exists proceeding with build"
+            echo "::set-output name=image_exist::false"
           fi
+      - name: Build and push
+        if: check_image.image_exist == 'false'
+        run: |
+          chmod +x build_docker.sh
           ./build_docker.sh -r ${{ env.IMAGE_REPO }} -a https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.arm-suffix }}.tar.gz -x https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.x86-suffix }}.tar.gz
