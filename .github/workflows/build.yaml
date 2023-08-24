@@ -6,6 +6,7 @@ on:
       - main
 env:
   IMAGE_RELEASE: "ghcr.io/${{ github.repository_owner }}/yugabytedb-postgis"
+  IMAGE_REPO: "ghcr.io/${{ github.repository_owner }}"
 
 jobs:
   build-and-push-image:
@@ -35,6 +36,10 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           chmod +x build_docker.sh
-          ./build_docker.sh -a https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.arm-suffix }}.tar.gz -x https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.x86-suffix }}.tar.gz
+          chmod +x check_docker_tag.sh
+          ./check_docker_tag.sh ${{ env.IMAGE_RELEASE }} ${{ matrix.version }}-${{ matrix.build }}
+          ./build_docker.sh -r ${{ env.IMAGE_REPO }} -a https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.arm-suffix }}.tar.gz -x https://downloads.yugabyte.com/releases/${{ matrix.version }}/yugabyte-${{ matrix.version }}-${{ matrix.build }}-${{ matrix.x86-suffix }}.tar.gz

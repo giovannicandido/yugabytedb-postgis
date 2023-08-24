@@ -7,7 +7,7 @@ usage() {
   echo "$0 usage: <arguments> -farm <URI for package tarball> -fx86 <URI for package tarball>  <-- docker build opts>"
   echo "  -x <Package URI>  URI to package tarball X86.  Supports https, s3, scp, and local files"
   echo "  -a <Package URI>  URI to package tarball ARM.  Supports https, s3, scp, and local files"
-  echo "  -r <repository>   Docker hub repository.  Default is 'yugabytedb'"
+  echo "  -r <repository>   Docker hub repository.  Default is 'ghcr.io/giovannicandido'"
   echo "  -l                Tag the image as tag_latest"
   echo "Anything after -- is passed to the docker build command"
 }
