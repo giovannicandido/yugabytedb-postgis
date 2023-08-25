@@ -20,7 +20,12 @@ dnf -qy module disable postgresql
 
 yum install -y postgresql11-server postgis33_11 postgis33_11-client
 
-curl -O http://mirror.centos.org/centos/7/updates/$TARGET_PLATFORM/Packages/libxml2-2.9.1-6.el7_9.6.$PLATFORM.rpm
+if [ $PLATFORM == 'aarch64' ]; then
+  curl -O http://linuxsoft.cern.ch/centos-altarch/7/updates/$PLATFORM/Packages/libxml2-2.9.1-6.el7_9.6.$PLATFORM.rpm
+else 
+  curl -O http://mirror.centos.org/centos/7/updates/$PLATFORM/Packages/libxml2-2.9.1-6.el7_9.6.$PLATFORM.rpm
+fi
+
 rpm2cpio libxml2-2.9.1-6.el7_9.6.$PLATFORM.rpm | cpio -idmv
 rm -f lib/yb-thirdparty/libxml2.so.2
 cp usr/lib64/libxml2.so.2* lib/yb-thirdparty/
@@ -36,7 +41,12 @@ yum autoremove -y postgresql11-server postgis33_11 postgis33_11-client
 yum clean all
 rm -rf /var/cache/yum
 
-curl -O https://rpmfind.net/linux/centos/7.9.2009/os/$TARGET_PLATFORM/Packages/sqlite-3.7.17-8.el7_7.1.$PLATFORM.rpm
+if [ $PLATFORM == 'aarch64' ]; then
+  curl -O http://linuxsoft.cern.ch/centos-altarch/7/os/$PLATFORM/Packages/sqlite-3.7.17-8.el7_7.1.$PLATFORM.rpm
+else
+  curl -O https://rpmfind.net/linux/centos/7.9.2009/os/$PLATFORM/Packages/sqlite-3.7.17-8.el7_7.1.$PLATFORM.rpm
+fi
+
 rpm2cpio sqlite-3.7.17-8.el7_7.1.$PLATFORM.rpm | cpio -idmv
 
 ls /
