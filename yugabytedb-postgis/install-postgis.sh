@@ -38,12 +38,11 @@ bin/post_install.sh -e
 
 yum autoremove -y postgresql11-server postgis33_11 postgis33_11-client
 
-yum install -y geos-devel
-
 yum clean all
 rm -rf /var/cache/yum
 
 if [ $PLATFORM = 'aarch64' ]; then
+  yum install -y geos-devel libtiff
   curl -O http://linuxsoft.cern.ch/centos-altarch/7/os/$PLATFORM/Packages/sqlite-3.7.17-8.el7_7.1.$PLATFORM.rpm
 else
   curl -O https://rpmfind.net/linux/centos/7.9.2009/os/$PLATFORM/Packages/sqlite-3.7.17-8.el7_7.1.$PLATFORM.rpm
@@ -54,10 +53,10 @@ rpm2cpio sqlite-3.7.17-8.el7_7.1.$PLATFORM.rpm | cpio -idmv
 ls /
 
 cp /lib64/libsqlite3.so.0.8.6 /libsqlite3.so.0.8.6.bak
-cp /lib64/libsqlite3.so /libsqlite3.so.bak
+cp /lib64/libsqlite3.so.0 /libsqlite3.so.0.bak
 
 rm -rf /lib64/libsqlite3.so.0.8.6
-rm -rf /lib64/libsqlite3.so
+rm -rf /lib64/libsqlite3.so.0
 cp --remove-destination usr/lib64/libsqlite3.so.0 /lib64/
 cp --remove-destination usr/lib64/libsqlite3.so.0.8.6 /lib64/
 cp --remove-destination usr/lib64/libsqlite3.so.0.8.6 lib/yb-thirdparty/
