@@ -38,6 +38,8 @@ bin/post_install.sh -e
 
 yum autoremove -y postgresql11-server postgis33_11 postgis33_11-client
 
+yum install -y geos-devel
+
 yum clean all
 rm -rf /var/cache/yum
 
@@ -50,6 +52,9 @@ fi
 rpm2cpio sqlite-3.7.17-8.el7_7.1.$PLATFORM.rpm | cpio -idmv
 
 ls /
+
+cp /lib64/libsqlite3.so.0.8.6 /libsqlite3.so.0.8.6.bak
+cp /lib64/libsqlite3.so /libsqlite3.so.bak
 
 rm -rf /lib64/libsqlite3.so.0.8.6
 rm -rf /lib64/libsqlite3.so
