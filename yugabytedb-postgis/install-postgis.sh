@@ -36,7 +36,7 @@ cp -v "$(/usr/pgsql-11/bin/pg_config --sharedir)"/extension/*postgis*.sql "$(pos
 cp -v "$(/usr/pgsql-11/bin/pg_config --sharedir)"/extension/*postgis*.control "$(postgres/bin/pg_config --sharedir)"/extension
 bin/post_install.sh -e
 
-yum autoremove -y postgresql11-server postgis33_11 postgis33_11-client
+#yum autoremove -y postgresql11-server postgis33_11 postgis33_11-client
 
 yum clean all
 rm -rf /var/cache/yum
